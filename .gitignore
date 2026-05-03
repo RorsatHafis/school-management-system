@@ -33,5 +33,4 @@ build/
 .vscode/
 
 .env
-application.properties
-application.yml
+

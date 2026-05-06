@@ -10,6 +10,8 @@ import com.student.demo.dto.RegisterRequestDTO;
 import com.student.demo.entity.User;
 import com.student.demo.repository.UserRepository;
 
+import main.java.com.student.demo.exception.UsernameAlreadyTakenException;
+
 @Service
 public class UserService implements UserDetailsService {
 
@@ -41,7 +43,7 @@ public class UserService implements UserDetailsService {
 
         if (repository.existsByUsername(dto.getUsername())) {
 
-            throw new IllegalArgumentException ("Username already taken!");
+            throw new UsernameAlreadyTakenException ("Username already taken!");
 
         }
 

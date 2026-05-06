@@ -4,10 +4,13 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import main.java.com.student.demo.exception.UsernameAlreadyTakenException;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -43,6 +46,15 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleNotFound (StudentNotFoundException e) {
 
         return ResponseEntity.status(404).body(e.getMessage());
+
+    }
+
+    @ExceptionHandler(UsernameAlreadyTakenException.class)
+    public ResponseEntity<?> handleTakenUsername (UsernameAlreadyTakenException e) {
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(e.getMessage());
 
     }
 

@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import main.java.com.student.demo.exception.UsernameAlreadyTakenException;
+import main.java.com.student.demo.dto.ApiResponse;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,15 +32,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(InvalidSearchException.class)
-    public ResponseEntity<?> handleInvalidSearch (InvalidSearchException e) {
+    public ResponseEntity<ApiResponse<String>> handleInvalidSearch(InvalidSearchException e) {
 
         return ResponseEntity.badRequest().body(
-            Map.of(
-                "error", "INVALID_SEARCH",
-                "message", e.getMessage()
-            )
+            new ApiResponse<>(false, e.getMessage(), null)
         );
-
+        
     }
 
     @ExceptionHandler(StudentNotFoundException.class)
@@ -50,19 +48,19 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UsernameAlreadyTakenException.class)
-    public ResponseEntity<?> handleTakenUsername (UsernameAlreadyTakenException e) {
+    public ResponseEntity<ApiResponse<?>> handleTakenUsername (UsernameAlreadyTakenException e) {
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(e.getMessage());
+                .body(ApiResponse.error(e.getMessage()));
 
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleGeneral (Exception e) {
+    public ResponseEntity<ApiResponse<String>> handleGeneral (Exception e) {
 
         e.printStackTrace();
-        return ResponseEntity.status(500).body("Something went wrong!");
+        return ResponseEntity.status(500).body(ApiResponse.error(e.getMessage()));
 
     }
     

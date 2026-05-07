@@ -79,25 +79,29 @@ public class StudentController {
     }
 
     @GetMapping("/search/name")
-    public ResponseEntity<List<StudentResponseDTO>> getByName (@RequestParam String keyword) {
+    public ResponseEntity<ApiResponse<List<StudentResponseDTO>>> getByName (@RequestParam String keyword) {
 
         List<StudentResponseDTO> result = service.getStudentByName(keyword);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(
+            ApiResponse.success("Student retreived", result)
+        );
 
     }
 
     @GetMapping("/age-range")
-    public ResponseEntity<List<StudentResponseDTO>> getByAgeRange (
+    public ResponseEntity<ApiResponse<List<StudentResponseDTO>>> getByAgeRange (
         @RequestParam int minAge,
         @RequestParam int maxAge
     ) {
 
         List<StudentResponseDTO> result = service.getStudentByAgeRange(minAge, maxAge);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(
+            ApiResponse.success("Student retreived", result)
+        );
     }
 
     @GetMapping("/search/grade")
-    public ResponseEntity<PageResponseDTO<StudentResponseDTO>> searchByGrade (
+    public ResponseEntity<ApiResponse<PageResponseDTO<StudentResponseDTO>>> searchByGrade (
         @RequestParam String grade,
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size
@@ -107,15 +111,19 @@ public class StudentController {
 
         Page<StudentResponseDTO> result = service.getStudentByGrade(grade, pageable);
 
-        return ResponseEntity.ok(new PageResponseDTO<>(result));
+        return ResponseEntity.ok(
+            ApiResponse.success("Students retrieved", new PageResponseDTO<>(result))
+        );
 
     }
 
     @GetMapping("/grade-count")
-    public ResponseEntity<List<GradeCountDTO>> countByGrade () {
+    public ResponseEntity<ApiResponse<List<GradeCountDTO>>> countByGrade () {
 
         List<GradeCountDTO> result = service.getStudentCountByGrade();
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(
+            ApiResponse.success("Student retreived", result)
+        );
 
     }
 

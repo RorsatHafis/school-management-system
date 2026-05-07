@@ -7,6 +7,8 @@ import com.student.demo.dto.StudentResponseDTO;
 import com.student.demo.service.StudentService;
 
 import jakarta.validation.Valid;
+import main.java.com.student.demo.common.AppConstants;
+import main.java.com.student.demo.dto.ApiResponse;
 
 import java.util.List;
 
@@ -38,7 +40,7 @@ public class StudentController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<PageResponseDTO<StudentResponseDTO>> getAllStudent (
+    public ResponseEntity<ApiResponse<PageResponseDTO<StudentResponseDTO>>> getAllStudent (
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,
         @RequestParam(defaultValue = "name") String sortBy,
@@ -53,7 +55,9 @@ public class StudentController {
 
         Page<StudentResponseDTO> result = service.getAllStudents(pageable);
         
-        return ResponseEntity.ok(new PageResponseDTO<>(result));
+        return ResponseEntity.ok(
+            ApiResponse.success("Students retrieved", new PageResponseDTO<>(result))
+        );
 
     }
 
@@ -61,14 +65,16 @@ public class StudentController {
     public ResponseEntity<String> addStudent (@Valid @RequestBody StudentRequestDTO dto) {
 
         service.addStudent(dto);
-        return ResponseEntity.status(201).body("Student added sucessfully!");
+        return ResponseEntity.status(201).body(AppConstants.STUDENT_ADDED);
 
     }
 
     @GetMapping("/id/{id}")
-    public ResponseEntity<StudentResponseDTO> getById (@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<StudentResponseDTO>> getById (@PathVariable Long id) {
 
-        return ResponseEntity.ok(service.getStudentById(id));
+        return ResponseEntity.ok(
+            ApiResponse.success("Student retrieved", service.getStudentById(id))
+        );
 
     }
 

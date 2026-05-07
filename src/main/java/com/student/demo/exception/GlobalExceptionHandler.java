@@ -16,7 +16,7 @@ import org.springframework.http.HttpStatus;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidation (MethodArgumentNotValidException e) {
+    public ResponseEntity<ApiResponse<Map<String, String>>> handleValidation (MethodArgumentNotValidException e) {
 
         Map<String, String> errors = new HashMap<>();
 
@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
             errors.put(error.getField(), error.getDefaultMessage())
          );
 
-        return ResponseEntity.status(400).body(errors);
+        return ResponseEntity.status(400).body(new ApiResponse<>(false, "Validation failed", errors));
 
     }
 
@@ -43,9 +43,9 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(StudentNotFoundException.class)
-    public ResponseEntity<String> handleNotFound (StudentNotFoundException e) {
+    public ResponseEntity<ApiResponse<String>> handleNotFound (StudentNotFoundException e) {
 
-        return ResponseEntity.status(404).body(e.getMessage());
+        return ResponseEntity.status(404).body(ApiResponse.error(e.getMessage()));
 
     }
 
